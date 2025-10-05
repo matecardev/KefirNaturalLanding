@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas con Kéfir - Kéfir Natural</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sage-green: #87A96B;
+            --cream: #F5F5DC;
+            --emerald: #059669; /* unificado con index.html */
+            --dark-gray: #2F4F4F;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f8f8f8 100%);
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .recipe-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .ingredient-item {
+            transition: all 0.3s ease;
+        }
+        
+        .ingredient-item:hover {
+            background: rgba(80, 200, 120, 0.1);
+            transform: translateX(5px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+            }
+            
+            .hero-title.text-5xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .hero-title.text-6xl {
+                font-size: 3rem !important;
+            }
+            
+            section {
+                padding-top: 4rem !important;
+                padding-bottom: 4rem !important;
+            }
+            
+            .recipe-card {
+                padding: 1.5rem !important;
+            }
+            
+            .grid-cols-1.md\\:grid-cols-3 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .grid-cols-1.md\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .grid-cols-1.lg\\:grid-cols-3 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .grid-cols-1.lg\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .flex-col.sm\\:flex-row {
+                flex-direction: column !important;
+            }
+            
+            .hidden.md\\:flex {
+                display: none !important;
+            }
+            
+            .whatsapp-btn {
+                padding: 0.75rem 1.5rem !important;
+                font-size: 0.875rem !important;
+            }
+            
+            .whatsapp-btn.text-lg {
+                font-size: 1rem !important;
+            }
+            
+            .px-8 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .text-xl.md\\:text-2xl {
+                font-size: 1.125rem !important;
+            }
+            
+            .text-2xl.md\\:text-3xl {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .hero-title.text-5xl {
+                font-size: 2rem !important;
+            }
+            
+            .hero-title.text-6xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .text-4xl {
+                font-size: 1.875rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 2.25rem !important;
+            }
+            
+            .text-xl {
+                font-size: 1rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .p-8 {
+                padding: 1rem !important;
+            }
+            
+            .py-20 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            
+            .pt-32 {
+                padding-top: 8rem !important;
+            }
+            
+            .pb-16 {
+                padding-bottom: 2rem !important;
+            }
+        }
+    </style>
+    <style>
+        /* Ajuste para breadcrumb: asegurarse que no quede tapado por la nav fija */
+        .breadcrumb {
+            margin-top: 4rem; /* altura aproximada de la nav (h-16 = 4rem) */
+            position: relative;
+            z-index: 40;
+        }
+        @media (max-width: 768px) {
+            .breadcrumb { margin-top: 5rem; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navigation (loaded from partials/nav.html) -->
+    <div id="shared-nav-placeholder"></div>
+
+    <!-- Breadcrumb (solo para la subpágina recetas) -->
+    <div class="bg-white py-3 border-b border-gray-200 breadcrumb">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="text-sm text-gray-600" aria-label="breadcrumb">
+                <ol class="list-reset flex items-center space-x-2">
+                    <li><a href="index.html" class="hover:underline text-emerald-600">Inicio</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li class="text-gray-800 font-semibold">Recetas</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-24" style="background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);">
+        <div class="max-w-5xl mx-auto px-6 sm:px-6 lg:px-8 text-center py-8">
+            <h1 class="hero-title text-5xl md:text-6xl font-bold text-gray-800 mb-8 scroll-reveal" style="text-shadow:none;">
+                Recetas Deliciosas con Kéfir
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-6 max-w-3xl mx-auto scroll-reveal">
+                Descubre formas creativas y deliciosas de incorporar el kéfir en tu dieta diaria. 
+                Desde smoothies hasta postres, ¡hay una receta perfecta para ti!
+            </p>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section id="recetas" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Recetas Favoritas
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Estas recetas no solo son deliciosas, sino que maximizan los beneficios probióticos del kéfir.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Smoothie Energético -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-blender text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Smoothie Energético</h3>
+                        <p class="text-gray-600">Perfecto para el desayuno</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 taza de kéfir de leche
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 plátano maduro
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1/2 taza de frutos rojos
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharada de miel
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharada de semillas de chía
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Licúa todos los ingredientes</li>
+                            <li>2. Sirve frío inmediatamente</li>
+                            <li>3. Decora con frutas frescas</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Rico en antioxidantes, probióticos y energía sostenida
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bowl de Kéfir -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fa-solid fa-bowl-food text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Bowl Proteico</h3>
+                        <p class="text-gray-600">Ideal post-entrenamiento</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                3/4 taza de kéfir griego
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1/4 taza de granola
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1/2 taza de frutas tropicales
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 cucharadas de coco rallado
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharada de nueces
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Coloca el kéfir en un bowl</li>
+                            <li>2. Agrega las frutas cortadas</li>
+                            <li>3. Espolvorea granola y nueces</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Alto en proteínas, grasas saludables y fibra
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panqueques de Kéfir -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-utensils text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Panqueques Saludables</h3>
+                        <p class="text-gray-600">Desayuno nutritivo</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 taza de kéfir de leche
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 huevo
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                3/4 taza de avena molida
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharadita de polvo de hornear
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharadita de vainilla
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Mezcla todos los ingredientes</li>
+                            <li>2. Cocina en sartén antiadherente</li>
+                            <li>3. Sirve con frutas y miel</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Fuente de proteínas, fibra y probióticos
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mousse de Kéfir -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-ice-cream text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Mousse Ligero</h3>
+                        <p class="text-gray-600">Postre saludable</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 taza de kéfir griego
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 cucharadas de cacao puro
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 cucharadas de miel
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 cucharadita de vainilla
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                Frutas para decorar
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Mezcla el kéfir con el cacao</li>
+                            <li>2. Agrega la miel y vainilla</li>
+                            <li>3. Refrigera por 2 horas</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Bajo en calorías, rico en antioxidantes y probióticos
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Aderezo de Kéfir -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-leaf text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Aderezo Verde</h3>
+                        <p class="text-gray-600">Para ensaladas</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1/2 taza de kéfir de leche
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1/4 taza de perejil fresco
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 dientes de ajo
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                Jugo de 1 limón
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                Sal y pimienta al gusto
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Licúa todos los ingredientes</li>
+                            <li>2. Ajusta la consistencia con agua</li>
+                            <li>3. Refrigera antes de servir</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Rico en hierro, vitamina C y probióticos
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sopa de Kéfir -->
+                <div class="recipe-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fa-solid fa-spoon text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Sopa Fría</h3>
+                        <p class="text-gray-600">Ideal para verano</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Ingredientes:</h4>
+                        <ul class="space-y-2">
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 tazas de kéfir de leche
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                1 pepino grande
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 ramas de eneldo fresco
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                2 dientes de ajo
+                            </li>
+                            <li class="ingredient-item p-2 rounded-lg flex items-center">
+                                <i class="fas fa-check text-emerald-600 mr-2"></i>
+                                Sal marina al gusto
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">Preparación:</h4>
+                        <ol class="text-sm text-gray-600 space-y-1">
+                            <li>1. Licúa todos los ingredientes</li>
+                            <li>2. Refrigera por 2 horas</li>
+                            <li>3. Sirve frío con hierbas frescas</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-4 rounded-lg">
+                        <div class="text-sm text-emerald-800">
+                            <strong>Beneficios:</strong> Hidratante, refrescante y digestivo
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="py-20" style="background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Consejos para Cocinar con Kéfir
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Maximiza los beneficios del kéfir en tus recetas con estos consejos profesionales.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center scroll-reveal">
+                    <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-thermometer-half text-2xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Temperatura</h3>
+                    <p class="text-gray-600">
+                        No calientes el kéfir por encima de 40°C para preservar los probióticos vivos.
+                    </p>
+                </div>
+                
+                <div class="text-center scroll-reveal">
+                    <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-clock text-2xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Tiempo</h3>
+                    <p class="text-gray-600">
+                        Consume las preparaciones con kéfir dentro de las 24-48 horas para máximos beneficios.
+                    </p>
+                </div>
+                
+                <div class="text-center scroll-reveal">
+                    <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-balance-scale text-2xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Sustitución</h3>
+                    <p class="text-gray-600">
+                        Sustituye la leche o yogur por kéfir en tus recetas favoritas en proporción 1:1.
+                    </p>
+                </div>
+                
+                <div class="text-center scroll-reveal">
+                    <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-leaf text-2xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Combinación</h3>
+                    <p class="text-gray-600">
+                        Combina el kéfir con frutas, verduras y semillas para recetas más nutritivas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-emerald-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mb-6">
+                    ¿Listo para Comenzar?
+                </h2>
+                <p class="text-xl text-emerald-100 mb-8">
+                    Obtén kéfir de la más alta calidad y comienza a disfrutar de todas estas deliciosas recetas. 
+                    Tu salud intestinal te lo agradecerá.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="https://wa.link/b71utt" target="_blank" class="bg-white text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center hover:bg-gray-100 transition-colors">
+                        <i class="fab fa-whatsapp text-2xl mr-3"></i>
+                        Comprar Kéfir Ahora
+                    </a>
+                    <a href="index.html" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-emerald-600 transition-all">
+                        Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <!-- Shared footer (loaded from partials/footer.html) -->
+    <div id="shared-footer-placeholder"></div>
+
+    <script>
+        // Scroll reveal animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+
+    <script>
+        // Utility: load HTML partial into container
+        async function loadPartial(url, containerId) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Fetch failed');
+                const html = await res.text();
+                document.getElementById(containerId).innerHTML = html;
+                return true;
+            } catch (e) {
+                console.warn('No se pudo cargar partial:', url, e);
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPartial('partials/nav.html', 'shared-nav-placeholder');
+            await loadPartial('partials/footer.html', 'shared-footer-placeholder');
+
+            // Re-init mobile menu and anchor handlers
+            (function initAfterNav() {
+                const btn = document.getElementById('mobile-menu-button');
+                const panel = document.getElementById('mobile-menu');
+                if (btn && panel) {
+                    btn.addEventListener('click', () => {
+                        const expanded = btn.getAttribute('aria-expanded') === 'true';
+                        btn.setAttribute('aria-expanded', String(!expanded));
+                        panel.classList.toggle('hidden');
+                    });
+                    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+                        panel.classList.add('hidden');
+                        btn.setAttribute('aria-expanded', 'false');
+                    }));
+                }
+
+                // Smooth anchors
+                document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href && href.startsWith('#')) {
+                            e.preventDefault();
+                            const targetId = href.substring(1);
+                            const target = document.getElementById(targetId);
+                            if (target) {
+                                const nav = document.querySelector('nav');
+                                const navHeight = nav ? nav.offsetHeight : 0;
+                                const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+                                window.scrollTo({ top, behavior: 'smooth' });
+                            }
+                        }
+                    });
+                });
+            })();
+        });
+    </script>
+</body>
+</html>

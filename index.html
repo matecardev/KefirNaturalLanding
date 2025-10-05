@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kéfir - El Poder de la Salud Natural</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sage-green: #87A96B;
+            --cream: #F5F5DC;
+            --emerald: #059669;
+            --dark-gray: #2F4F4F;
+            /* Color compartido para highlight y números grandes */
+            --highlight-color: var(--emerald);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f8f8f8 100%);
+        }
+        /* Scroll suave nativo para anclas */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Evitar que las secciones queden ocultas por la nav fija */
+        section {
+            scroll-margin-top: 6rem;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Mejoras visuales para el Hero */
+        .hero-bg {
+            transform: scale(1.01);
+            /* Hacer la imagen más clara: aumentar brillo y saturación ligera, reducir blur */
+            filter: brightness(1.20) saturate(1.06) contrast(1.03) blur(0.2px);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            /* Capa blanca semitransparente para aclarar sin perder color */
+            background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
+            pointer-events: none;
+            mix-blend-mode: normal;
+            backdrop-filter: saturate(1);
+        }
+
+        .hero-title {
+            text-shadow: none; /* quitar sombra como solicitaste */
+            color: #05251f; /* título oscuro para buen contraste sobre la imagen aclarada */
+            margin-bottom: 2rem; /* más espacio bajo el título */
+        }
+
+        .hero-lead {
+            color: #26473f; /* párrafo del hero con mayor contraste */
+        }
+
+        /* Highlight para una palabra dentro del texto del carrusel */
+        .typed-highlight {
+            color: var(--highlight-color);
+            font-weight: 700;
+        }
+
+        /* Clase para los números grandes del hero que deben usar el mismo color */
+        .stat-number {
+            color: var(--highlight-color);
+        }
+
+        .primary-cta {
+            box-shadow: 0 10px 30px rgba(37, 161, 99, 0.12);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .primary-cta:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(37, 161, 99, 0.18);
+        }
+
+        @keyframes bounceArrow {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+            100% { transform: translateY(0); }
+        }
+
+        .down-arrow {
+            display: inline-flex;
+            margin-top: 0.5rem; /* menos espacio sobre la flecha */
+            color: rgba(47,79,79,0.9);
+            animation: bounceArrow 2.2s infinite;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .benefit-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .nutrition-bar {
+            width: 0%;
+            transition: width 2s ease-in-out;
+        }
+        
+        .nutrition-bar.animate {
+            width: var(--target-width);
+        }
+        
+        .type-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+        
+        .faq-item.active .faq-content {
+            max-height: 300px;
+            opacity: 1;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Responsive Design - Simplificado y efectivo */
+        @media (max-width: 768px) {
+            /* Ajustes de tipografía */
+            .hero-title {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .text-5xl {
+                font-size: 2.5rem;
+            }
+            
+            .text-4xl {
+                font-size: 2rem;
+            }
+            
+            .text-xl {
+                font-size: 1.125rem;
+            }
+            
+            /* Ajustes de espaciado */
+            section {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+            
+            .min-h-screen {
+                min-height: 80vh;
+            }
+            
+            .pt-20 {
+                padding-top: 6rem;
+            }
+            
+            /* Ajustes de contenedores */
+            .max-w-7xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .p-8 {
+                padding: 1.5rem;
+            }
+            
+            /* Grid responsive */
+            .md\\:grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .md\\:grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .lg\\:grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .lg\\:grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Flex responsive */
+            .sm\\:flex-row {
+                flex-direction: column;
+            }
+            
+            /* Navegación */
+            .hidden.md\\:flex {
+                display: none;
+            }
+            
+            /* Botones */
+            .whatsapp-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .text-5xl {
+                font-size: 2rem;
+            }
+            
+            .text-4xl {
+                font-size: 1.875rem;
+            }
+            
+            .text-xl {
+                font-size: 1rem;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem;
+            }
+            
+            .p-8 {
+                padding: 1rem;
+            }
+            
+            section {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navigation (loaded from partials/nav.html) -->
+    <div id="shared-nav-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" style="background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);">
+            <div class="absolute inset-0 opacity-20">
+            <img src="assets/images/hero-kefir.jpg" alt="Kéfir natural" class="w-full h-full object-cover hero-bg">
+            <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto px-6 sm:px-6 lg:px-8 text-center py-12" style="padding-bottom:4.5rem; padding-top:5rem;">
+            <h1 class="hero-title text-5xl md:text-7xl font-bold text-gray-800 mb-12">
+                <span id="typed-text"></span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Descubre el poder de esta bebida milenaria cargada de probióticos naturales. 
+                Mejora tu salud intestinal, fortalece tu sistema inmunológico y revitaliza tu cuerpo con cada sorbo.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <a href="https://wa.link/b71utt" target="_blank" class="whatsapp-btn primary-cta text-white px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center">
+                    <i class="fab fa-whatsapp text-2xl mr-3"></i>
+                    Comienza tu Transformación
+                </a>
+                <button onclick="scrollToSection('beneficios')" class="border-2 border-emerald-600 primary-cta text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-emerald-600 hover:text-white transition-all">
+                    Descubre los Beneficios
+                </button>
+            </div>
+
+            <div class="down-arrow">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19" stroke="rgba(47,79,79,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 12L12 19L5 12" stroke="rgba(47,79,79,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                <div class="text-center">
+                    <div class="text-4xl font-bold stat-number mb-2">400M</div>
+                    <div class="text-gray-600">Microorganismos beneficiosos por gramo</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold stat-number mb-2">12+</div>
+                    <div class="text-gray-600">Beneficios comprobados para la salud</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold stat-number mb-2">100%</div>
+                    <div class="text-gray-600">Natural y probiótico</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="beneficios" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Beneficios del Kéfir para tu Salud
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    El kéfir es mucho más que una bebida fermentada. Es un superalimento probiótico 
+                    que transforma tu salud desde dentro.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Salud Intestinal</h3>
+                    <p class="text-gray-600 mb-4">
+                        Los probióticos del kéfir equilibran tu microbiota intestinal, mejorando la digestión 
+                        y absorción de nutrientes. Reduce el estreñimiento y la hinchazón abdominal.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Mejora el tránsito intestinal</li>
+                        <li>• Reduce síndrome de intestino irritable</li>
+                        <li>• Fortalece la barrera intestinal</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sistema Inmunológico</h3>
+                    <p class="text-gray-600 mb-4">
+                        Fortalece tus defensas naturales con más de 30 cepas de bacterias beneficiosas. 
+                        Los probióticos estimulan la producción de anticuerpos y mejoran la respuesta inmune.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Aumenta la producción de anticuerpos</li>
+                        <li>• Reduce la incidencia de infecciones</li>
+                        <li>• Mejora la respuesta inmune</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-bone"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Salud Ósea</h3>
+                    <p class="text-gray-600 mb-4">
+                        Rico en calcio y vitamina K2, el kéfir previene la osteoporosis y fortalece huesos y dientes. 
+                        La vitamina K2 mejora la absorción de calcio en los huesos.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• 127mg de calcio por 100g</li>
+                        <li>• Vitamina K2 para absorción óptima</li>
+                        <li>• Previene la osteoporosis</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Salud Mental</h3>
+                    <p class="text-gray-600 mb-4">
+                        El eje intestino-cerebro se beneficia con los probióticos del kéfir. 
+                        La producción de serotonina mejora el estado de ánimo y reduce la ansiedad.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Aumenta la producción de serotonina</li>
+                        <li>• Reduce síntomas de ansiedad</li>
+                        <li>• Mejora la calidad del sueño</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-weight"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Control de Peso</h3>
+                    <p class="text-gray-600 mb-4">
+                        Regula el apetito y mejora el metabolismo. Con solo 64 calorías por 100g, 
+                        es una opción nutritiva y baja en calorías que ayuda en la gestión del peso.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• 64 kcal por 100g</li>
+                        <li>• Regula el apetito</li>
+                        <li>• Mejora el metabolismo</li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-card bg-white/80 p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-emerald-600 text-5xl mb-4">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Piel Saludable</h3>
+                    <p class="text-gray-600 mb-4">
+                        Las propiedades antiinflamatorias y antimicrobianas del kéfir mejoran la salud de la piel. 
+                        Reduce eczemas, dermatitis y combate bacterias dañinas.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Reduce inflamación cutánea</li>
+                        <li>• Combate bacterias dañinas</li>
+                        <li>• Mejora eczemas y dermatitis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recetas CTA Section -->
+    <section id="recetas-cta" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center scroll-reveal">
+                <div class="p-8 bg-emerald-50 rounded-2xl cursor-pointer hover:shadow-lg" role="link" tabindex="0" onclick="location.href='recetas.html'" onkeydown="if(event.key==='Enter') location.href='recetas.html'">
+                    <h2 class="hero-title text-3xl md:text-4xl font-bold text-gray-800 mb-4">Recetas con Kéfir</h2>
+                    <p class="text-gray-600 mb-6">Explora recetas nutritivas y fáciles para incorporar kéfir en tu día a día: smoothies, aderezos, postres y más. Perfectas para aprovechar sus probióticos y sabor único.</p>
+                    <a id="cta-ver-recetas" href="recetas.html" class="inline-block bg-emerald-600 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-700 transition-colors">Ver Recetas</a>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer" role="link" tabindex="0" onclick="location.href='recetas.html'" onkeydown="if(event.key==='Enter') location.href='recetas.html'">
+                    <img src="assets/images/smoothieKefir.png" alt="Smoothie de kéfir" class="w-full h-64 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Types Section -->
+    <section id="tipos" class="py-20" style="background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Tipos de Kéfir
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Cada tipo de kéfir ofrece beneficios únicos. Elige el que mejor se adapte a tus necesidades y preferencias.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="type-card p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-cow text-3xl text-emerald-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Kéfir de Leche</h3>
+                        <p class="text-gray-600">El más popular y nutritivo</p>
+                    </div>
+                    
+                    <img src="assets/images/types-kefir.jpg" alt="Kéfir de leche" class="w-full h-48 object-cover rounded-lg mb-6">
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Calorías</span>
+                            <span class="font-semibold">64 kcal/100g</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Proteínas</span>
+                            <span class="font-semibold">3.3g/100g</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Calcio</span>
+                            <span class="font-semibold">127mg/100g</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-800 mb-2">Beneficios principales:</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Alto contenido en proteínas</li>
+                            <li>• Rico en calcio y vitamina K2</li>
+                            <li>• Ideal para fortalecer huesos</li>
+                            <li>• Mejora la digestión de lácteos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="type-card p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-tint text-3xl text-blue-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Kéfir de Agua</h3>
+                        <p class="text-gray-600">La alternativa vegana y ligera</p>
+                    </div>
+                    
+                    <img src="assets/images/types-kefir.jpg" alt="Kéfir de agua" class="w-full h-48 object-cover rounded-lg mb-6">
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Calorías</span>
+                            <span class="font-semibold">15 kcal/100g</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Azúcares</span>
+                            <span class="font-semibold">3g/100g</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Probióticos</span>
+                            <span class="font-semibold">30+ cepas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-800 mb-2">Beneficios principales:</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Sin lácteos, ideal para veganos</li>
+                            <li>• Muy bajo en calorías</li>
+                            <li>• Refrescante y hidratante</li>
+                            <li>• Rica en probióticos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="type-card p-8 rounded-2xl shadow-lg scroll-reveal">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-4 shadow-lg">
+                            <i class="fas fa-coconut text-3xl text-orange-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Kéfir de Coco</h3>
+                        <p class="text-gray-600">Exótico y lleno de energía</p>
+                    </div>
+                    
+                    <img src="assets/images/types-kefir.jpg" alt="Kéfir de coco" class="w-full h-48 object-cover rounded-lg mb-6">
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Grasas saludables</span>
+                            <span class="font-semibold">MCT</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Electrolitos</span>
+                            <span class="font-semibold">Alto</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Sabor</span>
+                            <span class="font-semibold">Tropical</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-800 mb-2">Beneficios principales:</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Rico en grasas MCT</li>
+                            <li>• Excelente fuente de electrolitos</li>
+                            <li>• Ideal post-entrenamiento</li>
+                            <li>• Sabor tropical delicioso</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nutrition Section -->
+    <section id="nutricion" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Valor Nutricional del Kéfir
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    El kéfir es un alimento completo que aporta nutrientes esenciales para tu bienestar diario.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="scroll-reveal">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Composición por 100g de Kéfir de Leche</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Energía</span>
+                                <span class="font-semibold">64 kcal</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="nutrition-bar bg-emerald-500 h-3 rounded-full" style="--target-width: 32%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Proteínas</span>
+                                <span class="font-semibold">3.3g</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="nutrition-bar bg-blue-500 h-3 rounded-full" style="--target-width: 66%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Calcio</span>
+                                <span class="font-semibold">127mg (13% VDR)</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="nutrition-bar bg-purple-500 h-3 rounded-full" style="--target-width: 13%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Vitamina B12</span>
+                                <span class="font-semibold">0.2μg</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="nutrition-bar bg-orange-500 h-3 rounded-full" style="--target-width: 8%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Probióticos</span>
+                                <span class="font-semibold">400M UFC/g</span>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-3">
+                                <div class="nutrition-bar bg-red-500 h-3 rounded-full" style="--target-width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scroll-reveal">
+                    <img src="assets/images/bone-health.jpg" alt="Salud ósea con kéfir" class="w-full rounded-2xl shadow-lg">
+                    <div class="mt-6 p-6 bg-emerald-50 rounded-xl">
+                        <h4 class="font-bold text-gray-800 mb-3">¿Por qué es superior al yogur?</h4>
+                        <ul class="text-gray-600 space-y-2">
+                            <li>• <strong>Más probióticos:</strong> Hasta 36 cepas vs 2-7 del yogur</li>
+                            <li>• <strong>Mayor diversidad:</strong> Bacterias y levaduras beneficiosas</li>
+                            <li>• <strong>Mejor digestibilidad:</strong> Fermentación más completa</li>
+                            <li>• <strong>Menos lactosa:</strong> Ideal para intolerantes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20" style="background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    Preguntas Frecuentes
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Resolvemos tus dudas sobre el kéfir y su consumo.
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="faq-item bg-white/80 backdrop-blur-sm rounded-xl shadow-lg scroll-reveal">
+                    <button class="w-full p-6 text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-semibold text-gray-800">¿Es seguro tomar kéfir todos los días?</span>
+                        <i class="fas fa-chevron-down faq-icon text-emerald-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">
+                            Sí, el kéfir es seguro para el consumo diario. De hecho, se recomienda tomar 1-2 tazas al día 
+                            para obtener todos sus beneficios probióticos. La clave es comenzar con pequeñas cantidades 
+                            si nunca lo has consumido y aumentar gradualmente.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white/80 backdrop-blur-sm rounded-xl shadow-lg scroll-reveal">
+                    <button class="w-full p-6 text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-semibold text-gray-800">¿Puedo tomar kéfir si soy intolerante a la lactosa?</span>
+                        <i class="fas fa-chevron-down faq-icon text-emerald-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">
+                            Muchas personas intolerantes a la lactosa pueden consumir kéfir de leche sin problemas, 
+                            ya que durante la fermentación la lactosa se transforma en ácido láctico. Sin embargo, 
+                            si tienes intolerancia severa, te recomendamos el kéfir de agua o de coco.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white/80 backdrop-blur-sm rounded-xl shadow-lg scroll-reveal">
+                    <button class="w-full p-6 text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-semibold text-gray-800">¿Cuándo es el mejor momento para tomar kéfir?</span>
+                        <i class="fas fa-chevron-down faq-icon text-emerald-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">
+                            Puedes tomar kéfir en cualquier momento del día. Muchas personas prefieren tomarlo en ayunas 
+                            por la mañana para maximizar la absorción de probióticos. También es excelente como merienda 
+                            o después de las comidas para mejorar la digestión.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white/80 backdrop-blur-sm rounded-xl shadow-lg scroll-reveal">
+                    <button class="w-full p-6 text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-semibold text-gray-800">¿Cuánto tiempo tarda en hacer efecto el kéfir?</span>
+                        <i class="fas fa-chevron-down faq-icon text-emerald-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">
+                            Los beneficios digestivos pueden notarse desde la primera semana de consumo regular. 
+                            Para los beneficios a largo plazo como la mejora del sistema inmunológico y la salud ósea, 
+                            se recomienda consumir kéfir durante al menos 2-3 meses de forma consistente.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white/80 backdrop-blur-sm rounded-xl shadow-lg scroll-reveal">
+                    <button class="w-full p-6 text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-semibold text-gray-800">¿Puedo hacer kéfir en casa?</span>
+                        <i class="fas fa-chevron-down faq-icon text-emerald-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6">
+                        <p class="text-gray-600">
+                            ¡Sí! Hacer kéfir en casa es muy sencillo. Solo necesitas granos de kéfir (se pueden conseguir 
+                            de personas que ya los tengan o comprarlos online) y leche o agua azucarada. El proceso de 
+                            fermentación toma 24-48 horas y los granos se reproducen, por lo que tendrás kéfir para siempre.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-emerald-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="scroll-reveal">
+                <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mb-6">
+                    ¿Listo para Transformar tu Salud?
+                </h2>
+                <p class="text-xl text-emerald-100 mb-8">
+                    Únete a miles de personas que ya han descubierto los beneficios del kéfir. 
+                    Comienza tu viaje hacia una mejor salud intestinal y bienestar general.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="https://wa.link/b71utt" target="_blank" class="bg-white text-emerald-600 px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center hover:bg-gray-100 transition-colors">
+                        <i class="fab fa-whatsapp text-2xl mr-3"></i>
+                        Comenzar con Kéfir
+                    </a>
+                    <button onclick="scrollToSection('beneficios')" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-emerald-600 transition-all">
+                        Ver Más Beneficios
+                    </button>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-emerald-100">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2">100%</div>
+                        <div>Natural</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2">0</div>
+                        <div>Aditivos</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2">∞</div>
+                        <div>Beneficios</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (inyectado desde partials/footer.html) -->
+
+    <script>
+        // Typed.js initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Usar frases estáticas para el título rotatorio (evita mostrar nombres de secciones)
+            // Cada frase contiene una palabra destacada envuelta en <span class="typed-highlight">...
+            const typedHtmlStrings = [
+                'Descubre el Poder del <span class="typed-highlight">Kéfir</span>',
+                'Transforma tu <span class="typed-highlight">Salud</span> Natural',
+                'Revitaliza tu <span class="typed-highlight">Microbiota</span>'
+            ];
+
+            new Typed('#typed-text', {
+                strings: typedHtmlStrings,
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 2000,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|',
+                autoInsertCss: false,
+                contentType: 'html'
+            });
+            
+            // Scroll reveal animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        
+                        // Animate nutrition bars
+                        if (entry.target.querySelector('.nutrition-bar')) {
+                            setTimeout(() => {
+                                entry.target.querySelectorAll('.nutrition-bar').forEach(bar => {
+                                    bar.classList.add('animate');
+                                });
+                            }, 500);
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+            // Interceptar clicks en enlaces que apuntan a anclas para asegurar scroll suave y evitar salto instantáneo
+            document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        const nav = document.querySelector('nav');
+                        const navHeight = nav ? nav.offsetHeight : 0;
+                        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Si la URL tiene un hash (por ejemplo #faq) al recargar, evitar que el navegador salte a esa sección.
+            if (window.location.hash) {
+                // Si el hash apunta a recetas-cta, ejecutamos openRecetasCTA en vez de navegar directamente
+                const hash = window.location.hash.substring(1);
+                if (hash === 'recetas-cta' && typeof openRecetasCTA === 'function') {
+                    // Esperar a que el layout esté listo, luego abrir la sección CTA
+                    setTimeout(() => {
+                        openRecetasCTA();
+                        try {
+                            history.replaceState(null, '', window.location.pathname + window.location.search);
+                        } catch (e) {}
+                    }, 120);
+                } else {
+                    // Para otros hashes, evitamos el salto instantáneo y removemos el hash
+                    setTimeout(() => {
+                        window.scrollTo({ top: 0, left: 0 });
+                        try {
+                            history.replaceState(null, '', window.location.pathname + window.location.search);
+                        } catch (e) {
+                            // ignore
+                        }
+                    }, 50);
+                }
+            }
+        });
+
+        
+        
+        // Smooth scroll function
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        
+        // FAQ toggle function
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+        
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('bg-white/95');
+                nav.classList.remove('bg-white/90');
+            } else {
+                nav.classList.add('bg-white/90');
+                nav.classList.remove('bg-white/95');
+            }
+        });
+
+        // Mobile menu toggle
+        (function() {
+            const btn = document.getElementById('mobile-menu-button');
+            const panel = document.getElementById('mobile-menu');
+            if (!btn || !panel) return;
+            btn.addEventListener('click', () => {
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', String(!expanded));
+                panel.classList.toggle('hidden');
+            });
+            // Close menu when clicking a link
+            panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+                panel.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }));
+        })();
+
+        // Open Recetas CTA from nav without redirecting immediately
+        function openRecetasCTA() {
+            const section = document.getElementById('recetas-cta');
+            const ctaButton = document.getElementById('cta-ver-recetas');
+            if (section) {
+                const nav = document.querySelector('nav');
+                const navHeight = nav ? nav.offsetHeight : 0;
+                const top = section.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+                window.scrollTo({ top, behavior: 'smooth' });
+                // Después de que termine el scroll, enfocamos el botón para que el usuario pueda pulsarlo
+                // reducir tiempo y hacerlo dependiente del desplazamiento (estimado)
+                const ms = 500;
+                setTimeout(() => {
+                    if (ctaButton) {
+                        ctaButton.focus({ preventScroll: true });
+                    }
+                }, ms);
+            }
+        }
+
+        // Resaltar enlaces de navegación según la sección visible
+        // Definimos una función reutilizable que puede invocarse después de cargar la nav partial
+        function initHighlightNavOnScroll() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            if (!navLinks || navLinks.length === 0) return; // la nav aún no está cargada
+
+            const sections = Array.from(document.querySelectorAll('section[id]'));
+            const obsOptions = { root: null, threshold: 0.45 };
+
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            // reset
+                            link.classList.remove('text-emerald-600');
+                            link.classList.add('text-gray-600');
+                            link.removeAttribute('aria-current');
+                        });
+
+                        // Try to match by data-keyword first, then href
+                        const active = Array.from(navLinks).find(a => {
+                            const kw = a.getAttribute('data-keyword');
+                            if (kw && id.includes(kw)) return true;
+                            const href = a.getAttribute('href') || '';
+                            // Match simple anchors (#id), anchors with path (index.html#id) and any href containing the hash
+                            if (href === ('#' + id)) return true;
+                            if (href.endsWith('#' + id)) return true;
+                            if (href.includes('#' + id)) return true;
+                            return false;
+                        });
+
+                        if (active) {
+                            active.classList.remove('text-gray-600');
+                            active.classList.add('text-emerald-600');
+                            active.setAttribute('aria-current', 'true');
+                        }
+                    }
+                });
+            }, obsOptions);
+
+            sections.forEach(s => obs.observe(s));
+        }
+
+        // Intentamos inicializar ahora (si la nav ya existe). Si no, se reintentará después de inyectar la partial.
+        try { initHighlightNavOnScroll(); } catch (e) { /* ignore */ }
+    </script>
+    <!-- Shared footer (loaded from partials/footer.html) -->
+    <div id="shared-footer-placeholder"></div>
+
+    <script>
+        // Utility: load HTML partial into container
+        async function loadPartial(url, containerId) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Fetch failed');
+                const html = await res.text();
+                document.getElementById(containerId).innerHTML = html;
+                return true;
+            } catch (e) {
+                console.warn('No se pudo cargar partial:', url, e);
+                return false;
+            }
+        }
+
+        // Inicializar nav y footer compartidos (para multi-page)
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPartial('partials/nav.html', 'shared-nav-placeholder');
+            await loadPartial('partials/footer.html', 'shared-footer-placeholder');
+
+            // Re-run behaviors that depend on nav being present
+            (function initAfterNav() {
+                // Mobile menu toggle
+                const btn = document.getElementById('mobile-menu-button');
+                const panel = document.getElementById('mobile-menu');
+                if (btn && panel) {
+                    btn.addEventListener('click', () => {
+                        const expanded = btn.getAttribute('aria-expanded') === 'true';
+                        btn.setAttribute('aria-expanded', String(!expanded));
+                        panel.classList.toggle('hidden');
+                    });
+                    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+                        panel.classList.add('hidden');
+                        btn.setAttribute('aria-expanded', 'false');
+                    }));
+                }
+
+                // Anchor click handler for smooth scroll (only for anchors that point to sections on this page)
+                document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href && href.startsWith('#')) {
+                            e.preventDefault();
+                            const targetId = href.substring(1);
+                            const target = document.getElementById(targetId);
+                            if (target) {
+                                const nav = document.querySelector('nav');
+                                const navHeight = nav ? nav.offsetHeight : 0;
+                                const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+                                window.scrollTo({ top, behavior: 'smooth' });
+                            }
+                        }
+                    });
+                });
+
+                // Asegurar que los enlaces de la nav tengan la clase .nav-link (por si el partial no la incluyó)
+                document.querySelectorAll('nav a').forEach(a => {
+                    if (!a.classList.contains('nav-link')) a.classList.add('nav-link');
+                    // normalize default color
+                    if (!a.classList.contains('text-gray-600') && !a.classList.contains('text-emerald-600')) {
+                        a.classList.add('text-gray-600');
+                    }
+                });
+
+                // Inicializar resaltado por scroll ahora que la nav fue inyectada
+                if (typeof initHighlightNavOnScroll === 'function') {
+                    initHighlightNavOnScroll();
+                }
+
+                // Manejador no intrusivo para enlaces que apuntan a recetas-cta
+                document.querySelectorAll('nav a').forEach(a => {
+                    const href = a.getAttribute('href') || '';
+                    if (href.includes('#recetas-cta')) {
+                        a.addEventListener('click', function(e) {
+                            // Si estamos ya en la página principal, evitamos la navegación y abrimos el CTA
+                            const path = location.pathname || '';
+                            const onIndex = path.endsWith('index.html') || path === '/' || path === '';
+                            if (onIndex && typeof openRecetasCTA === 'function') {
+                                e.preventDefault();
+                                // close mobile menu if open
+                                const panel = document.getElementById('mobile-menu');
+                                const btn = document.getElementById('mobile-menu-button');
+                                if (panel && !panel.classList.contains('hidden')) {
+                                    panel.classList.add('hidden');
+                                    if (btn) btn.setAttribute('aria-expanded', 'false');
+                                }
+                                openRecetasCTA();
+                            }
+                        });
+                    }
+                });
+            })();
+        });
+    </script>
+</body>
+</html>

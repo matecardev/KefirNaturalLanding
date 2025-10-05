@@ -1,0 +1,26 @@
+.DS_Store
+Thumbs.db
+node_modules/
+.vscode/
+.idea/
+*.log
+.env
+.env.local
+*.code-workspace
+dist/
+build/
+__pycache__/
+*.pyc
+/.sass-cache/
+npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+coverage/
+.DS_Store
+*.backup
+
+# OneDrive temp files
+~$*
+
+# Mac
+Icon?
